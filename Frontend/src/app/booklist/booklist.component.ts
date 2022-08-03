@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BookModel } from './book.model';
 import { BookService } from '../book.service';
+import { UserService } from '../user.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,7 +13,7 @@ export class BooklistComponent implements OnInit {
   title:String = "List of books";
   rbooks: BookModel[] =[];
     
-  constructor(private bookservice: BookService,private router: Router) { }
+  constructor(private bookservice: BookService,public user:UserService, private router: Router) { }
 
   ngOnInit(): void {
     this.bookservice.getBooks().subscribe((data)=>{

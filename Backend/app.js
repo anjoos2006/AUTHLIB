@@ -27,6 +27,22 @@ app.use(cors());
 
 // *************** Routes for the user starts here ********************
 
+function verifyToken(req, res, next) {
+    if(!req.headers.authorization) {
+      return res.status(401).send('Unauthorized request')
+    }
+    let token = req.headers.authorization.split(' ')[1]
+    if(token === 'null') {
+      return res.status(401).send('Unauthorized request')    
+    }
+    let payload = jwt.verify(token, 'secretKey')
+    console.log("payload is",payload)
+    if(!payload) {
+      return res.status(401).send('Unauthorized request')    
+    }
+    req.userId = payload.subject
+    next()
+  }
 
 app.post('/users/signup', async (req, res) => {
     console.log("in user route");
@@ -119,6 +135,7 @@ app.get('/books/:id', async (req,res)=>{
 
 app.delete('/books/remove/:id', async (req,res)=>{
     try{
+        const id = req.params.id;
         const deletedBook = await Book.findByIdAndDelete({"_id":id}); 
         res.json(deletedBook);
         console.log("deleetd"+deletedBook);
@@ -128,7 +145,7 @@ app.delete('/books/remove/:id', async (req,res)=>{
     }
   })
 
-app.post('/books/add', async (req, res) => {
+app.post('/books/add', verifyToken, async (req, res) => {
     console.log("in book route");
     console.log(req.body.Book.title);
     console.log("req body:");

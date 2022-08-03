@@ -15,13 +15,16 @@
           <a class="nav-link" href="#"  routerLink="/books">Books</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#"  routerLink="/addbook">Add books</a>
+            <a class="nav-link" href="#" *ngIf="user.loggedIn()" routerLink="/addbook">Add books</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"  routerLink="/users/signup">SignUP</a>
+            <a class="nav-link" href="#" *ngIf="!user.loggedIn()" routerLink="/users/signup">SignUP</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"  routerLink="/userlogin">Login</a>
+            <a class="nav-link" href="#"  *ngIf="!user.loggedIn()" routerLink="/userlogin">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"  *ngIf="user.loggedIn()" (click)="logoutUser()">Logout</a>
           </li>
       </ul>
     </div>
